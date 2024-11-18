@@ -18,6 +18,7 @@ library(hrbrthemes)       # ggplot fancy theme
 library(patchwork)        # combine ggplots into one plot
 
 library(kableExtra)       # nice-looking table export
+library(gt)               # alternative table-creation and export package
 
 
 #### 0. Main text ####
@@ -43,9 +44,17 @@ source("Scripts/Table_1.R")
 
 s1 <- read_csv("Data/study_1.csv")
 
+# renaming to match the labels used in the paper
+s1 <- s1 %>% 
+  mutate(resource = case_when(resource == "Food" ~ "KitKat", 
+                            resource == "Water" ~ "Coke cans", 
+                            resource == "Time" ~ "Minutes", 
+                            TRUE ~ resource))
+
 #### 1.2 Tables 
 
 ## TODO Table S1
+source("Scripts/Table_S1.R")
 ## TODO Table S2
 ## TODO Table S3
 ## TODO Table S4
