@@ -20,6 +20,9 @@ library(patchwork)        # combine ggplots into one plot
 library(kableExtra)       # nice-looking table export
 library(gt)               # alternative table-creation and export package
 
+library(lme4)             # regression package
+library(sjPlot)           # regression table  
+library(webshot2)         # to save the model table to file
 
 #### 0. Main text ####
 
