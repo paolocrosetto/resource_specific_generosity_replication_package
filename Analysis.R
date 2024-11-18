@@ -53,11 +53,18 @@ s1 <- s1 %>%
 
 #### 1.2 Tables 
 
-## TODO Table S1
+## Table S1
 source("Scripts/Table_S1.R")
-## TODO Table S2
-## TODO Table S3
-## TODO Table S4
 
+
+## TODO Table S2
+source("Scripts/Table_S2.R")
+
+## TODO Table S3
+source("Scripts/Table_S3.R")
+
+
+## TODO Table S4
+source("Scripts/Table_S4.R")
 
 
