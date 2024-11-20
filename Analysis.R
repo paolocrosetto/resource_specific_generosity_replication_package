@@ -1,7 +1,6 @@
 ##
 ## Resource-dependent generosity
 ##
-## by Ziano, Liu and Crosetto
 ##
 ## Replication Package
 ##
@@ -24,6 +23,8 @@ library(lme4)             # regression package
 library(sjPlot)           # regression table  
 library(webshot2)         # to save the model table to file
 
+library(jmv)              # jamovi syntax for R
+
 #### 0. Main text ####
 
 #### 0.1 Data ####
@@ -39,6 +40,10 @@ source("Scripts/Figure_1.R")
 #### 0.3 Table 1 ####
 
 source("Scripts/Table_1.R")
+
+#### 0.4 Computations for abstract and main text ####
+
+## TODO
 
 
 ##### 1. Supplementary material: Study 1 ####
@@ -59,15 +64,11 @@ s1 <- s1 %>%
 ## Table S1
 source("Scripts/Table_S1.R")
 
-
-## TODO Table S2
+## Table S2
 source("Scripts/Table_S2.R")
 
-## TODO Table S3
+## Table S3
 source("Scripts/Table_S3.R")
 
-
-## TODO Table S4
+## Table S4
 source("Scripts/Table_S4.R")
-
-

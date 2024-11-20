@@ -1,6 +1,6 @@
 # Replication Package for "Resource-Specific Generosity"
 
-This repository contains all data and scripts to replicate the results of the paper *Resource-Specific Generosity* by Ignazio Ziano, Peggy Liu and Paolo Crosetto.
+This repository contains all data and scripts to replicate the results of the paper *Resource-Specific Generosity*.
 
 ## Dependencies
 

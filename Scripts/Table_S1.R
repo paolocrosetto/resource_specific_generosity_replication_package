@@ -1,7 +1,6 @@
 ##
 ## Resource-dependent generosity
 ##
-## by Ziano, Liu and Crosetto
 ##
 ## Replication Package
 ##
