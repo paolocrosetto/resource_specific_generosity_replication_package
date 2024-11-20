@@ -41,10 +41,6 @@ source("Scripts/Figure_1.R")
 
 source("Scripts/Table_1.R")
 
-#### 0.4 Computations for abstract and main text ####
-
-## TODO
-
 
 ##### 1. Supplementary material: Study 1 ####
 
