@@ -15,8 +15,8 @@ plotme <- df %>%
   group_by(study, resource) %>% 
   summarise(m = mean(share), 
             sem = sd(share)/sqrt(n())) %>% 
-  mutate(cil = m - 1.96*sem,
-         cih = m + 1.96*sem) %>% 
+  mutate(cil = m - qt(0.975, df = n() - 1)*sem,
+         cih = m + qt(0.975, df = n() - 1)*sem) %>% 
   select(study, resource, share = m, cil, cih) %>% 
   mutate(resource = as.factor(resource)) %>% 
   group_by(study) %>% 
