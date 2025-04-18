@@ -86,20 +86,54 @@ share_money_self <- df %>%
   summarise(share_self = mean(share_self)) %>% 
   mutate(share_self = paste0(100*round(share_self,3), "%"))
 
+# computing cohen's d for each study and each contrast
+
+cohens_d_results <- df %>%
+  filter(!is.na(donation)) %>%
+  mutate(resource = factor(resource)) |> 
+  group_by(study) %>%
+  group_modify(~ {
+    data_study <- .x
+
+    # Extract Money donations
+    donations_money <- data_study %>%
+      filter(resource == "Money") %>%
+      pull(donation)
+
+    # For each non-Money resource, compute Cohen's d vs. Money
+    data_study %>%
+      filter(resource != "Money") %>%
+      group_by(resource) %>%
+      summarise(
+        cohens_d = {
+          donations_other <- donation
+          d <- cohens_d(
+            c(donations_money, donations_other),
+            c(rep("Money", length(donations_money)),
+              rep(resource[1], length(donations_other)))
+          )
+          d$Cohens_d %>% as.numeric()
+        },
+        .groups = "drop"
+      )
+  })
+
+
 
 #### table ####
 
 kable <- distance_to_money %>% 
-  mutate(across(-resource,  ~100*round(.x, 3))) %>% 
-  mutate(ci = paste0("[", cil, ", ", cih, "]")) %>% 
-  select(study, resource, diff, ci) %>% 
+  left_join(cohens_d_results) %>% 
+  mutate(across(-resource & -cohens_d,  ~100*round(.x, 3)), 
+         cohens_d = round(cohens_d, 2)) %>% 
+  select(study, resource, diff, cohens_d) %>% 
   ungroup() %>% 
   arrange(study, diff) %>% 
   mutate(diff = paste0("+", diff, " p.p.")) %>% 
   select(-study) %>% 
   kbl(format = "latex", booktabs = T, col.names = NULL, align = c('lccc')) %>% 
   kable_styling(full_width = T, ) %>% 
-  add_header_above(c(" " = 1, "Allocated share change" = 1, "95% C.I." = 1)) %>% 
+  add_header_above(c(" " = 1, "Allocated share change" = 1, "Cohen's d" = 1)) %>% 
   column_spec(1, width = "4.2cm") %>% 
   pack_rows(paste0("Study 1 -- ",share_money_self$share_self[share_money_self$study == "Study 1"], " money to other"), 1, 4) %>% 
   pack_rows(paste0("Study 2 -- ",share_money_self$share_self[share_money_self$study == "Study 2"], " money to other"), 5, 11) %>% 
