@@ -9,6 +9,19 @@
 ##
 ## This file generates Figure 1 from the paper
 
+## compute within-subjects CIs
+df <- df  %>%  
+  mutate(share = donation/pie)
+  
+cis <- Rmisc::summarySEwithin(data = df, 
+                              measurevar = "share", 
+                              betweenvars = "study", 
+                              withinvars = "resource",
+                              idvar = "ID") %>%
+  as_tibble() %>%
+  select(study, resource, ci)
+  
+
 ## prepare the data for plotting
 plotme <- df %>% 
   mutate(share = donation/pie) %>% 
@@ -21,7 +34,10 @@ plotme <- df %>%
   mutate(resource = as.factor(resource)) %>% 
   group_by(study) %>% 
   mutate(resource = fct_reorder(resource,-share)) %>% 
-  arrange(study, resource)
+  arrange(study, resource) %>%
+  left_join(cis) %>%
+  mutate(cil = if_else(study == 'Study 4', cil, share - ci),
+         cih = if_else(study == 'Study 4', cih, share + ci))
 
 ## function to create a plot for one study
 study_plot <- function(selected_study){
