@@ -31,7 +31,7 @@ library(jmv)              # jamovi syntax for R
 
 #### 0.1 Data ####
 
-df <- read_csv("Data/all_studies_clean.csv")
+df <- read_csv("Data/all_10_studies_clean.csv")
 
 
 #### 0.2 Figure 1 ####
@@ -42,6 +42,10 @@ source("Scripts/Figure_1.R")
 #### 0.3 Table 1 ####
 
 source("Scripts/Table_1.R")
+
+### 0.4 Table 1b ####
+
+source("Scripts/Table_1b.R")
 
 
 ##### 1. Supplementary material: Study 1 ####

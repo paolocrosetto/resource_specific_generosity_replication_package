@@ -36,8 +36,8 @@ plotme <- df %>%
   mutate(resource = fct_reorder(resource,-share)) %>% 
   arrange(study, resource) %>%
   left_join(cis) %>%
-  mutate(cil = if_else(study == 'Study 4', cil, share - ci),
-         cih = if_else(study == 'Study 4', cih, share + ci))
+  mutate(cil = if_else(study %in% c('Study 4',"Study S1", "Study S2"), cil, share - ci),
+         cih = if_else(study %in% c('Study 4',"Study S1", "Study S2"), cih, share + ci))
 
 ## function to create a plot for one study
 study_plot <- function(selected_study){
@@ -47,17 +47,17 @@ study_plot <- function(selected_study){
     aes(share, fct_reorder(resource,-share), color = share)+
     geom_segment(aes(x = cil, xend = cih, yend = fct_reorder(resource,-share)), color = "grey85", linewidth = 2.3, lineend = "round")+
     geom_point(size = 3)+
-    facet_grid(study~., scales = "free_y", space = "free_y")+
-    scale_x_percent(limits = c(0.08,0.72), breaks = seq(0.1,0.7,0.1))+
+    facet_wrap(~study, scales = "free_y", space = "free_y")+
+    scale_x_percent(limits = c(0.08,0.88), breaks = seq(0.1,0.8,0.1))+
     theme_ipsum_rc()+
     scale_color_viridis_c()+
-    theme(strip.text = element_text(face = "bold"), 
+    theme(strip.text = element_text(face = "bold", hjust = 1), 
           legend.position = "none",
           panel.grid.minor.x = element_blank(), 
           panel.grid.major.y = element_line(linetype = "dotted"), 
           plot.background = element_rect(fill = "white", color = "white"))
   
-  if (selected_study == "Study 5") {
+  if (selected_study == "Study S2") {
     out <- out + labs(y = "", x = "Share donated")
   } else {
     out <- out + labs(y = "", x = "") 
@@ -70,15 +70,28 @@ ps2 <- study_plot("Study 2")
 ps3 <- study_plot("Study 3")
 ps4 <- study_plot("Study 4")
 ps5 <- study_plot("Study 5")
+ps6 <- study_plot("Study 6")
+ps7 <- study_plot("Study 7")
+ps8 <- study_plot("Study 8")
+psS1 <- study_plot("Study S1")
+psS2 <- study_plot("Study S2")
 
 
 ## stitch the plots into one meta-plot
-ps1 + plot_spacer() + 
+plot <- ps1 + plot_spacer() + 
   ps2 + plot_spacer() + 
   ps3 + plot_spacer() + 
   ps4 + plot_spacer() + 
-  ps5 + 
-  plot_layout(ncol = 1, heights = c(5,-2,8,-2,9,-2,3,-2,4))
+  ps5 + plot_spacer() + 
+  ps6 + plot_spacer() + 
+  ps7 + plot_spacer() + 
+  ps8 + plot_spacer() + 
+  psS1 + plot_spacer() + 
+  psS2 + 
+  plot_layout(ncol = 1, 
+              heights = c(5,-1,8,-1,9,-1,3,-1,4,-1,3,-1,7,-1,4,-1,3,-1,3))&
+  theme(plot.margin = margin(0, 5, 0, 0))
 
 ## save the plot to file
-ggsave("Figures/Figure_1.png", width = 9/1.1, height = 12/1.1, units = "in", dpi = "retina")
+ggsave("Figures/Figure_1_try.png", plot = plot, width = 12/1.1, height = 18/1.1, units = "in", dpi = "retina")
+
