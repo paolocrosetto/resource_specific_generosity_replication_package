@@ -198,3 +198,41 @@ kable <- distance_to_money %>%
 save_kable(kable, "Table_1_try.png")
 save_kable(kable, "Table_1_try.pdf")
 
+## computing numbers for abstract
+## study 1
+df %>% 
+  filter(study == "Study 1") %>% 
+  mutate(restype = if_else(resource == "Money", "Money","Other")) %>% 
+  group_by(restype) %>% 
+  mutate(share = donation/pie) %>% 
+  summarise(m = mean(share, na.rm = T))
+
+## all other studies
+df %>% 
+  mutate(incentives = study == "Study 1") %>% 
+  mutate(restype = case_when(resource == "Money" ~ "Money", 
+                               study != "Study 7" & 
+                               str_detect(resource, "\\+") == F & 
+                               str_detect(resource, "\\:") == F   ~ "Other", 
+                             TRUE ~ "Manipulated")) %>% 
+  group_by(restype, incentives) %>% 
+  mutate(share = donation/pie) %>% 
+  summarise(m = 100*round(mean(share, na.rm = T), 4)) %>% 
+  filter(restype != "Manipulated") %>% 
+  pivot_wider(names_from = restype, values_from = m) %>% 
+  mutate(delta = Other - Money)
+
+## overall
+df %>% 
+  mutate(incentives = study == "Study 1") %>% 
+  mutate(restype = case_when(resource == "Money" ~ "Money", 
+                             study != "Study 7" & 
+                               str_detect(resource, "\\+") == F & 
+                               str_detect(resource, "\\:") == F   ~ "Other", 
+                             TRUE ~ "Manipulated")) %>% 
+  group_by(restype) %>% 
+  mutate(share = donation/pie) %>% 
+  summarise(m = 100*round(mean(share, na.rm = T), 4)) %>% 
+  filter(restype != "Manipulated") %>% 
+  pivot_wider(names_from = restype, values_from = m) %>% 
+  mutate(delta = Other - Money)
