@@ -43,10 +43,6 @@ source("Scripts/Figure_1.R")
 
 source("Scripts/Table_1.R")
 
-### 0.4 Table 1b ####
-
-# source("Scripts/Table_1b.R")
-
 
 ##### 1. Supplementary material: Study 1 ####
 
@@ -74,3 +70,12 @@ source("Scripts/Table_S3.R")
 
 ## Table S4
 source("Scripts/Table_S4.R")
+
+
+##### 2. Supplementary material: Study 5, LLM classification ####
+
+## First, rerun the LLM classification if you wish. 
+## To do so, head to the /LLM directory and follow instructions therein
+
+## this script takes the data from the LLM classification and reproduces tables 10 and 11 in the manuscript
+source("Scripts/LLM_classification_analysis.R")
