@@ -45,7 +45,7 @@ source("Scripts/Table_1.R")
 
 ### 0.4 Table 1b ####
 
-source("Scripts/Table_1b.R")
+# source("Scripts/Table_1b.R")
 
 
 ##### 1. Supplementary material: Study 1 ####

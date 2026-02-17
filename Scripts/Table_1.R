@@ -195,8 +195,8 @@ kable <- distance_to_money %>%
   pack_rows(paste0("Study S2 -- ",share_money_self$share_self[share_money_self$study == "Study S2"], " money to other"), 38, 39) 
 
 
-save_kable(kable, "Table_1_try.png")
-save_kable(kable, "Table_1_try.pdf")
+save_kable(kable, "Table_1.png")
+save_kable(kable, "Table_1.pdf")
 
 ## computing numbers for abstract
 ## study 1

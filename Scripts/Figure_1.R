@@ -93,5 +93,5 @@ plot <- ps1 + plot_spacer() +
   theme(plot.margin = margin(0, 5, 0, 0))
 
 ## save the plot to file
-ggsave("Figures/Figure_1_try.png", plot = plot, width = 12/1.1, height = 18/1.1, units = "in", dpi = "retina")
+ggsave("Figures/Figure_1.png", plot = plot, width = 12/1.1, height = 18/1.1, units = "in", dpi = "retina")
 
