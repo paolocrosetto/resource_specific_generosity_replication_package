@@ -3,14 +3,8 @@
 ## in order to later feed the data to the LLM
 ## that will classify the texts according to their main motive
 
-library(tidyverse)
-library(haven)
-library(hrbrthemes)
-library(gt)
-library(gtExtras)
-
 #### 1. getting and cleaning original data ####
-df <- read_sav("Data/Self-other Resource Allocation Open-Ended Pitt - Fall 2025 #251010_cleaned.sav")
+df <- read_sav("Data/study_5_openended.sav")
 
 ## selecting variables of interest
 df <- df %>% 

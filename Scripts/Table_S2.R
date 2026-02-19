@@ -1,5 +1,5 @@
   ##
-  ## Resource-dependent generosity
+  ## Resource-specific generosity
   ##
   ##
   ## Replication Package

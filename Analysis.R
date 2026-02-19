@@ -1,23 +1,25 @@
 ##
-## Resource-dependent generosity
+## Resource-specific generosity
 ##
 ##
 ## Replication Package
 ##
-## This version: 0.1, 11 Nov 2024
+## This version: 0.9, Feb 2026
 ##
 ##
-## This file replicates the figures and tables in the main text and the supplement of the paper
+## This file replicates the figures and tables in the main text and part of those in the supplement of the paper
 
 #### 0. Libraries ####
 
 library(tidyverse)        # R dialect used in this file
+library(haven)            # functions to import external data sources (eg .sav)
 
 library(hrbrthemes)       # ggplot fancy theme
 library(patchwork)        # combine ggplots into one plot
 
 library(kableExtra)       # nice-looking table export
 library(gt)               # alternative table-creation and export package
+library(gtExtras)         # additional functions for {gt}
 
 library(effectsize)       # to compute cohen's d
 

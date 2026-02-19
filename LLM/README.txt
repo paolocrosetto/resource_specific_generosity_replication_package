@@ -1,6 +1,6 @@
 ## LLM classification of open-ended texts
 
-## Ziano, Crosetto and Liu (2026)
+## Resource-specific generosity (2026)
 
 ## WHAT WE DID
 
