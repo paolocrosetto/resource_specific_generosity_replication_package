@@ -3,8 +3,14 @@
 ## in order to later feed the data to the LLM
 ## that will classify the texts according to their main motive
 
+library(tidyverse)
+library(haven)
+library(hrbrthemes)
+library(gt)
+library(gtExtras)
+
 #### 1. getting and cleaning original data ####
-df <- read_sav("Data/study_5_openended.sav")
+df <- read_sav("Self-other Resource Allocation Open-Ended Pitt - Fall 2025 #251010_cleaned.sav")
 
 ## selecting variables of interest
 df <- df %>% 
@@ -27,34 +33,16 @@ df <- df %>%
 #### 2. read in and merge the classifications from the LLM ####
 
 # money
-LLM_money <- read_csv("Data/classified_money.csv") %>% 
-  select(ID, class_money = classification) %>% 
-  filter(class_money != "ERROR")
-
-## 17 were classified as "ERROR" because of a problem in the run. 
-## those were rerun and were fine
-LLM_money_error <- read_csv("Data/classified_money_errors.csv") %>% 
+LLM_money <- read_csv("LLM classification/classified_money.csv") %>% 
   select(ID, class_money = classification)
 
-# binding
-LLM_money <- LLM_money %>% bind_rows(LLM_money_error)
-
 # nonmoney
-LLM_nonmoney <- read_csv("Data/classified_nonmoney.csv") %>% 
-  select(ID, class_nonmoney = classification_nonmoney)%>% 
-  filter(class_nonmoney != "ERROR")
-
-
-## 68 were classified as "ERROR" because of a problem in the run. 
-## those were rerun and were fine
-LLM_nonmoney_error <- read_csv("Data/classified_nonmoney_errors.csv") %>% 
+LLM_nonmoney <- read_csv("LLM classification/classified_nonmoney.csv") %>% 
   select(ID, class_nonmoney = classification_nonmoney)
 
-# binding
-LLM_nonmoney <- LLM_nonmoney %>% bind_rows(LLM_nonmoney_error)
 
 # difference
-LLM_diff <- read_csv("Data/classified_diff.csv") %>% 
+LLM_diff <- read_csv("LLM classification/classified_diff.csv") %>% 
   select(ID, class_diff = classification_diff)
 
 class <- LLM_money %>% 
@@ -122,7 +110,7 @@ money_table %>%
          choice = fct_relevel(choice, "More to Self", "Equal Split")) %>% 
   arrange(resource, choice) %>% 
   select(choice, N = total, resource, 
-         SOCIALNORM, DESIRABILITY, SATIATION, FUNGIBILITY, PERISHABILITY, OTHER) %>% 
+         SOCIALNORM, DESIRABILITY, SATIATION, VERSATILITY, PERISHABILITY, OTHER) %>% 
   group_by(resource) %>% 
   gt() %>% 
   gt_theme_538() %>% 
@@ -171,7 +159,7 @@ money_table %>%
   gtsave("temp.html")
 
 webshot2::webshot("temp.html",
-                  "Tables/Table_10.png",
+                  "LLM_classified_justifications_all_2026.png",
                   expand = 30, zoom = 2,
                   selector = "table")
 
@@ -187,7 +175,7 @@ diff_table%>%
   select(choice, everything()) %>% 
   arrange(resource, choice) %>% 
   select(choice, N = total, resource, 
-         SOCIALNORM, DESIRABILITY, SATIATION, FUNGIBILITY, PERISHABILITY, OTHER) %>% 
+         SOCIALNORM, DESIRABILITY, SATIATION, VERSATILITY, PERISHABILITY, OTHER) %>% 
   group_by(resource) %>% 
   gt() %>% 
   gt_theme_538() %>% 
@@ -236,11 +224,53 @@ diff_table%>%
   gtsave("temp.html")
 
 webshot2::webshot("temp.html",
-                  "Tables/Table_11.png",
+                  "LLM_classified_justifications_diff_2026.png",
                   expand = 30, zoom = 2,
                   selector = "table")
   
-## cleanup
-rm(money_table, diff_table, resource_table)
-rm(LLM_money_error, LLM_nonmoney_error)
-file.remove("temp.html")
+
+#### 4. exploring some texts ####
+
+## money
+df %>% 
+  filter(class_money == "OTHER") %>% 
+  pull(explain_money)
+
+df %>% 
+  filter(class_money == "SATIATION") %>% 
+  pull(explain_money)
+
+df %>% 
+  filter(money_other > 5 & class_money == "SOCIALNORM") %>% 
+  pull(explain_money)
+
+## food
+df %>% 
+  filter(resource_other < 5 & resource == "food" & class_nonmoney == "DESIRABILITY") %>% 
+  pull(explain_nonmoney)
+
+df %>% 
+  filter(resource_other > 5 & resource == "food" & class_nonmoney == "SATIATION") %>% 
+  pull(explain_nonmoney)
+
+## pen
+df %>% 
+  filter(resource_other < 5 & resource == "pen" & class_nonmoney == "OTHER") %>% 
+  pull(explain_nonmoney)
+
+df %>% 
+  filter(resource_other < 5 & resource == "pen" & class_nonmoney == "SATIATION") %>% 
+  pull(explain_nonmoney)
+
+df %>% 
+  filter(resource_other > 5 & resource == "pen" & class_nonmoney == "SATIATION") %>% 
+  pull(explain_nonmoney)
+
+## diff
+df %>% 
+  filter(resource_other > money_other & class_diff == "DESIRABILITY") %>% 
+  pull(explain_diff)
+
+df %>% 
+  filter(resource_other > money_other & class_diff == "SATIATION") %>% 
+  pull(explain_diff)

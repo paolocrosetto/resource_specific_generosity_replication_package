@@ -13,7 +13,7 @@ We used an LLM to identify from the open-ended textual data the main motive of s
     • DESIRABILITY, when subjects cited liking (or not) a resource;
     • SATIATION, when subjects cited already having enough of a resource;
     • PERISHABILITY, when subjects cited concerns with limited future usefulness of the resource;
-    • FUNGIBILITY, when subjects refer to the many uses of a resource;
+    • VERSATILITY, when subjects refer to the many uses of a resource;
     • OTHER, for all other motives or non-discernible or unclear sentences.
 
 In particular, we used OpenAI GPT-4o-mini, called over OpenAI API using a python script. The LLM classification was run in November 2025
@@ -33,4 +33,4 @@ To run the python scripts, you need to
 - if you do not have an OpenAI API key, get one -- this script relies on tokens from the PAID version of OpenAI -- it uses very few tokens, as it ran on about 10 USD cents.
 - check that you have the right path to the input texts and change, if needed the path to the output data.
 
-You need to run each of three files once; then check if in the output "ERROR" is present. This can happen because the LLM fails to classify, or because of technical reasons (connection...) or because the parsing of the LLM output failed (missing commas, non-standard format in LLM response, etc). In this case, just isolate the texts for which an ERROR was produce, try to see what went wrong and rerun.
+You need to run each of three files once; then check if in the output "ERROR" is present. This can happen because the LLM fails to classify, or because of technical reasons (connection...) or because the parsing of the LLM output failed (missing commas, non-standard format in LLM response, etc). In this case, just isolate the texts for which an ERROR was produced, try to see what went wrong and rerun.

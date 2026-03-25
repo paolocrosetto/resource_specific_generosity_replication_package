@@ -12,12 +12,12 @@ INPUT_FILE = "texts_nonmoney.csv"
 OUTPUT_FILE = "classified_nonmoney.csv"
 INTERMEDIATE_FILE = "classified_partial.csv"
 BATCH_SIZE = 20        # number of sentences per API call
-MODEL = "gpt-4o-mini"  # select preferred model; this is the one we used
+MODEL = "gpt-4o-mini" # can switch to gpt-4o for higher quality
 
 # -------------------------
 # Initialize OpenAI client
 # -------------------------
-os.environ["OPENAI_API_KEY"] = "your_API_key_here"
+os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY_HERE"
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # -------------------------
@@ -55,11 +55,11 @@ After the choices, we asked the subjects three questions,
 3. [comparison] Please explain why you allocated LESS/SAME/MORE of one resource or the other to the other participant.
 
 
-Your role si to read the SECOND question -- other resource allocation and classify what you think is the MAIN reported motivations for the choice. 
+Your role si to read the SECOND question -- resource allocation and classify what you think is the MAIN reported motivations for the choice. 
 
-Your answer will be one and only one of the following: SOCIALNORM, DESIRABILITY, FUNGIBILITY, PERISHABILITY, SATIATION, OTHER. 
+Your answer will be one and only one of the following: SOCIALNORM, DESIRABILITY, VERSATILITY, PERISHABILITY, SATIATION, OTHER. 
 
-- FUNGIBILITY means that the subject refers to the fact that some resources are more fungible than others either directly or indirectly (e.g. with X one can have many uses; X can be used to make more things....)
+- VERSATILITY means that the subject refers to the fact that some resources have more uses than others either directly or indirectly (e.g. with X one can have many uses; X can be used to make more things....)
 - DESIRABILITY means that the subject indicates liking a resource more as the main reason for the choice (e.g. directly saying that she likes more one resource, or less the other)
 - SOCIALNORM means that the subject cites an injunctive norm of behavior as a justification for the choice (e.g. "it is fair to do so" or their choice is "how things should be")
 - SATIATION means that the subject indicates already having enough of one resource and hence valuing the extra units less (e.g. "I already have at home so this is less valuable to me")
@@ -68,7 +68,7 @@ Your answer will be one and only one of the following: SOCIALNORM, DESIRABILITY,
 
 For each row (that uniquely identifes a subject), row index 1 to N, read the three replies, make up your mind as to the best-fitting category. 
 
-Then reply strictly using the scheme: 1: FUNGIBILITY; 2: SATIATION; 3. DESIRABILITY ...
+Then reply strictly using the scheme: 1: VERSATILITY; 2: SATIATION; 3. DESIRABILITY ...
 
 
 {numbered_texts}
@@ -77,7 +77,7 @@ Then reply strictly using the scheme: 1: FUNGIBILITY; 2: SATIATION; 3. DESIRABIL
         response = client.chat.completions.create(
             model=MODEL,
             messages=[
-                {"role": "system", "content": "You are a text classifier. Reply uniquely by SOCIALNORM, DESIRABILITY, FUNGIBILITY, PERISHABILITY, SATIATION, OTHER."},
+                {"role": "system", "content": "You are a text classifier. Reply uniquely by SOCIALNORM, DESIRABILITY, VERSATILITY, PERISHABILITY, SATIATION, OTHER."},
                 {"role": "user", "content": prompt},
             ],
             temperature=0
@@ -85,8 +85,9 @@ Then reply strictly using the scheme: 1: FUNGIBILITY; 2: SATIATION; 3. DESIRABIL
         text_out = response.choices[0].message.content.strip()
         
         
+        # Parse structured response
         # Parse structured response with regex
-        pattern = r"(\d+)\s*:\s*(SOCIALNORM|DESIRABILITY|FUNGIBILITY|PERISHABILITY|SATIATION|OTHER)"
+        pattern = r"(\d+)\s*:\s*(SOCIALNORM|DESIRABILITY|VERSATILITY|PERISHABILITY|SATIATION|OTHER)"
         matches = re.findall(pattern, text_out, flags=re.IGNORECASE)
 
         classifications = ["ERROR"] * len(texts)
@@ -95,6 +96,18 @@ Then reply strictly using the scheme: 1: FUNGIBILITY; 2: SATIATION; 3. DESIRABIL
             if 0 <= idx_i < len(texts):
                 classifications[idx_i] = label.upper()
                 
+        # classifications = [None] * len(texts)
+        # for part in text_out.replace("\n"," ").split():
+        #     if ":" in part:
+        #         idx, cat = part.split(":", 1)
+        #         if idx.isdigit():
+        #             idx_i = int(idx)-1
+        #             if idx_i < len(classifications):
+        #                 classifications[idx_i] = cat.strip().upper()
+        # # Ensure the list has the correct length
+        # for i in range(len(classifications)):
+        #     if classifications[i] not in ["NORISK", "RISK", "AMBIGUITY","DEEPUNCERTAINTY"]:
+        #         classifications[i] = "ERROR"
         return classifications
     except Exception as e:
         print(f"Error classifying batch: {e}")

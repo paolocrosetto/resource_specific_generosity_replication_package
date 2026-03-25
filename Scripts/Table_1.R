@@ -180,7 +180,7 @@ kable <- distance_to_money %>%
   select(resource, diff, p_fmt, cohens_d) %>% 
   kbl(format = "latex", booktabs = T, col.names = NULL, align = c('lccc'), escape = F) %>% 
   kable_styling(full_width = T, ) %>% 
-  add_header_above(c(" " = 1, "Allocated share change" = 1, "p-value" = 1, "Cohen's" = 1)) %>% 
+  add_header_above(c(" " = 1, "Allocated share change" = 1, "p-value" = 1, "\\\\textit{d}" = 1), escape = F) %>% 
   column_spec(1, width = "4.2cm") %>% 
   column_spec(2, width = "4.2cm") %>% 
   pack_rows(paste0("Study 1 -- ",share_money_self$share_self[share_money_self$study == "Study 1"], " money to other"), 1, 4) %>% 
