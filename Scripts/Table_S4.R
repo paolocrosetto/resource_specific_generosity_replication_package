@@ -25,3 +25,12 @@ tab_model(r1, p.val = "satterthwaite", show.se = TRUE, file = "Tables/Table_S4.h
 
 # export to .png image
 webshot("Tables/Table_S4.html", "Tables/Table_S4.png", selector = "table")
+
+
+## analyze factors in isolation
+cor.test(ts4$donation, ts4$desirability) %>% broom::tidy()
+cor.test(ts4$donation, ts4$fungibility) %>% broom::tidy()
+cor.test(ts4$donation, ts4$perishability) %>% broom::tidy()
+cor.test(ts4$donation, ts4$social_norm) %>% broom::tidy()
+cor.test(ts4$donation, ts4$marginal_utility) %>% broom::tidy()
+cor.test(ts4$donation, ts4$valuation) %>% broom::tidy()

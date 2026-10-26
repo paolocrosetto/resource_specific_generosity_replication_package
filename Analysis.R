@@ -20,6 +20,7 @@ library(patchwork)        # combine ggplots into one plot
 library(kableExtra)       # nice-looking table export
 library(gt)               # alternative table-creation and export package
 library(gtExtras)         # additional functions for {gt}
+library(modelsummary)     # package to report regression tables
 
 library(effectsize)       # to compute cohen's d
 
@@ -36,12 +37,17 @@ library(jmv)              # jamovi syntax for R
 df <- read_csv("Data/all_10_studies_clean.csv")
 
 
-#### 0.2 Figure 1 ####
+#### 0.2 numbers for abstract ####
+
+source("Scripts/for_abstract.R")
+
+
+#### 0.3 Figure 1 ####
 
 source("Scripts/Figure_1.R")
 
 
-#### 0.3 Table 1 ####
+#### 0.4 Table 1 ####
 
 source("Scripts/Table_1.R")
 
@@ -72,6 +78,9 @@ source("Scripts/Table_S3.R")
 
 ## Table S4
 source("Scripts/Table_S4.R")
+
+## extra tables 6 and 7
+source("Scripts/BDM_exploration.R")
 
 
 ##### 2. Supplementary material: Study 5, LLM classification ####
